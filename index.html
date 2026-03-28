@@ -6,28 +6,37 @@
 
 <style>
 *{box-sizing:border-box;}
-body{margin:0;font-family:Segoe UI;background:#f5f7fa;}
+body{margin:0;font-family:Segoe UI;background:#f5f7fa;color:#333}
 
 /* HEADER */
 .header{
 position:sticky;top:0;background:white;
-padding:14px;text-align:center;
-font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.08);
+display:flex;justify-content:space-between;
+align-items:center;padding:12px 16px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+z-index:10;
+}
+.logo{font-weight:bold;}
+.menu a{margin-left:10px;text-decoration:none;color:#1976d2;}
+
+/* HERO */
+.hero{
+background:#1976d2;color:white;
+padding:40px 20px;text-align:center;
 }
 
 /* SEARCH */
 .search-box{padding:10px;background:white;}
 .search-box input{
-width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;
+width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;
 }
 
-/* SCROLL */
-.category-scroll,.brand{
-display:flex;gap:8px;padding:10px;background:white;
-overflow-x:auto;
+/* CATEGORY & BRAND */
+.category,.brand{
+display:flex;gap:10px;overflow:auto;padding:10px;background:white;
 }
-button{
-border:none;padding:8px 14px;border-radius:20px;
+.category button,.brand button{
+border:none;padding:8px 12px;border-radius:20px;
 background:#e3f2fd;color:#1976d2;
 }
 .active{background:#1976d2;color:white;}
@@ -37,28 +46,23 @@ background:#e3f2fd;color:#1976d2;
 display:grid;grid-template-columns:repeat(2,1fr);
 gap:12px;padding:10px;
 }
-@media(max-width:480px){
-.container{grid-template-columns:1fr;}
-}
+@media(max-width:480px){.container{grid-template-columns:1fr;}}
 
 /* CARD */
 .card{
-background:white;border-radius:16px;padding:10px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
+background:white;border-radius:14px;padding:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 .card img{
-width:100%;
-aspect-ratio:1/1;
-object-fit:contain;
-padding:10px;
+width:100%;aspect-ratio:1/1;
+object-fit:contain;padding:10px;
 }
+
+/* PRICE */
 .price{color:#1976d2;font-weight:bold;}
 
 /* BUTTON */
-.btn{
-width:100%;padding:10px;margin-top:6px;
-border:none;border-radius:8px;
-}
+.btn{width:100%;padding:8px;border:none;border-radius:8px;margin-top:6px;}
 .cart{background:#e3f2fd;color:#1976d2;}
 .buy{background:#1976d2;color:white;}
 
@@ -68,15 +72,14 @@ position:fixed;top:0;left:0;width:100%;height:100%;
 background:rgba(0,0,0,0.4);display:none;
 }
 #cartModal{
-position:fixed;right:-100%;top:0;width:85%;height:100%;
+position:fixed;right:-100%;top:0;width:80%;height:100%;
 background:white;padding:15px;transition:0.3s;
 }
 .checkout-bar{
 position:fixed;bottom:0;width:100%;padding:10px;background:white;
 }
 .checkout-btn{
-width:100%;padding:12px;background:#1976d2;color:white;
-border:none;border-radius:10px;
+width:100%;padding:12px;background:#1976d2;color:white;border:none;border-radius:10px;
 }
 
 /* TOAST */
@@ -92,27 +95,41 @@ opacity:0;transition:0.3s;
 
 <body>
 
-<div class="header">Katalog Container Box</div>
+<!-- HEADER -->
+<div class="header">
+<div class="logo">ALTA.ID</div>
+<div class="menu">
+<a href="#produk">Produk</a>
+</div>
+</div>
 
-<div id="toast">Ditambahkan ke keranjang</div>
+<!-- HERO -->
+<div class="hero">
+<h1>Supplier Container Box Berkualitas</h1>
+<p>Katalog lengkap, langsung order via WhatsApp</p>
+</div>
 
+<!-- SEARCH -->
 <div class="search-box">
 <input type="text" id="search" placeholder="Cari produk..." onkeyup="update()">
 </div>
 
-<div class="category-scroll">
+<!-- CATEGORY -->
+<div class="category">
 <button onclick="setCat('all',this)" class="active">Semua</button>
 <button onclick="setCat('Jolly Box',this)">Jolly Box</button>
 </div>
 
+<!-- BRAND -->
 <div class="brand">
 <button onclick="setBrand('all',this)" class="active">Semua Brand</button>
 <button onclick="setBrand('Hanata',this)">Hanata</button>
 </div>
 
+<!-- PRODUK -->
 <div class="container">
 
-<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="Jolly Box Hanata 643">
+<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="jolly box hanata 643">
 <img src="JBHNT643.png">
 <div>Jolly Box Hanata 643</div>
 <div class="price">Rp 50.000</div>
@@ -120,7 +137,7 @@ opacity:0;transition:0.3s;
 <button class="btn buy" onclick="order('Jolly Box Hanata 643')">Beli</button>
 </div>
 
-<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="Jolly Box Hanata 642">
+<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="jolly box hanata 642">
 <img src="JBHNT642.png">
 <div>Jolly Box Hanata 642</div>
 <div class="price">Rp 41.000</div>
@@ -143,37 +160,25 @@ opacity:0;transition:0.3s;
 <button class="checkout-btn" onclick="toggleCart()">🛒 Lihat Keranjang</button>
 </div>
 
+<!-- NOTIF -->
+<div id="toast"></div>
+
 <script>
-let cat='all';
-let brand='all';
-let cart=[];
-
-function showToast(text){
-let t=document.getElementById("toast");
-t.innerText=text;t.style.opacity=1;
-setTimeout(()=>t.style.opacity=0,1500);
-}
-
-function setCat(c,btn){
-cat=c;brand='all';update();
-setActive(btn,'.category-scroll button');
-}
-
-function setBrand(b,btn){
-brand=b;update();
-setActive(btn,'.brand button');
-}
+let cat='all',brand='all',cart=[];
 
 function update(){
 let keyword=document.getElementById("search").value.toLowerCase();
 document.querySelectorAll('.product').forEach(p=>{
-let name=p.dataset.name.toLowerCase();
+let name=p.dataset.name;
 let match=name.includes(keyword);
 let cMatch=(cat==='all'||p.dataset.cat===cat);
 let bMatch=(brand==='all'||p.dataset.brand===brand);
 p.style.display=(match&&cMatch&&bMatch)?'block':'none';
 });
 }
+
+function setCat(c,btn){cat=c;update();setActive(btn,'.category button');}
+function setBrand(b,btn){brand=b;update();setActive(btn,'.brand button');}
 
 function setActive(btn,selector){
 document.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
@@ -182,28 +187,21 @@ btn.classList.add('active');
 
 function addCart(name){
 let item=cart.find(i=>i.name===name);
-if(item){item.qty++;}
-else{cart.push({name:name,qty:1});}
-renderCart();
-showToast("✔ Ditambahkan");
+if(item){item.qty++;}else{cart.push({name,qty:1});}
+renderCart();showToast("✔ Ditambahkan");
 }
 
 function renderCart(){
 let html="";
-cart.forEach((i,idx)=>{
-html+=`${i.name} x${i.qty}<br>`;
-});
+cart.forEach(i=>html+=`${i.name} x${i.qty}<br>`);
 document.getElementById("cartItems").innerHTML=html;
 }
 
 function toggleCart(){
 let m=document.getElementById("cartModal");
 let o=document.getElementById("cartOverlay");
-if(m.style.right==="0px"){
-m.style.right="-100%";o.style.display="none";
-}else{
-m.style.right="0px";o.style.display="block";
-}
+if(m.style.right==="0px"){m.style.right="-100%";o.style.display="none";}
+else{m.style.right="0px";o.style.display="block";}
 }
 
 function checkout(){
@@ -215,6 +213,12 @@ window.open("https://wa.me/6285117385055?text="+encodeURIComponent(text));
 
 function order(p){
 window.open("https://wa.me/6285117385055?text="+encodeURIComponent("Pesan "+p));
+}
+
+function showToast(text){
+let t=document.getElementById("toast");
+t.innerText=text;t.style.opacity=1;
+setTimeout(()=>t.style.opacity=0,1500);
 }
 
 update();
