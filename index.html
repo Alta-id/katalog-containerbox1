@@ -129,7 +129,7 @@ opacity:0;transition:0.3s;
 <img src="JBHNT643.png">
 <div>Jolly Box Hanata 643</div>
 <div class="price">Rp 50.000</div>
-<button class="btn cart" onclick="addCart('Jolly Box Hanata 643',50000)">+ Keranjang</button>
+<button class="btn cart" onclick="addCart('Jolly Box Hanata 643',50000)">Tambah Keranjang</button>
 <button class="btn buy" onclick="order('Jolly Box Hanata 643')">Beli</button>
 </div>
 
@@ -137,8 +137,16 @@ opacity:0;transition:0.3s;
 <img src="JBHNT642.png">
 <div>Jolly Box Hanata 642</div>
 <div class="price">Rp 41.000</div>
-<button class="btn cart" onclick="addCart('Jolly Box Hanata 642',41000)">+ Keranjang</button>
+<button class="btn cart" onclick="addCart('Jolly Box Hanata 642',41000)">Tambah Keranjang</button>
 <button class="btn buy" onclick="order('Jolly Box Hanata 642')">Beli</button>
+</div>
+
+<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="jolly box hanata 641">
+<img src="JBHNT641.png">
+<div>Jolly Box Hanata 641</div>
+<div class="price">Rp 25.000</div>
+<button class="btn cart" onclick="addCart('Jolly Box Hanata 641',41000)">Tambah Keranjang</button>
+<button class="btn buy" onclick="order('Jolly Box Hanata 641')">Beli</button>
 </div>
 
 </div>
@@ -255,7 +263,7 @@ o.style.display="block";
 function checkout(){
 if(cart.length==0){showToast("Keranjang kosong");return;}
 
-let text="Pesanan:\n";
+let text="Halo ini daftar belanja saya:\n";
 let total=0;
 
 cart.forEach(i=>{
