@@ -6,169 +6,218 @@
 
 <style>
 *{box-sizing:border-box;}
-body{margin:0;font-family:Segoe UI;background:#f5f7fa;color:#333}
+body{margin:0;font-family:Segoe UI;background:#f5f7fa;}
 
 /* HEADER */
 .header{
 position:sticky;top:0;background:white;
-display:flex;justify-content:space-between;
-align-items:center;padding:12px 16px;
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
-z-index:10;
-}
-.logo{font-weight:bold;font-size:16px;}
-.menu a{
-margin-left:10px;
-text-decoration:none;
-color:#1976d2;
-font-size:14px;
+padding:14px;text-align:center;
+font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* HERO */
-.hero{
-background:#1976d2;
-color:white;
-padding:40px 20px;
-text-align:center;
-}
-.hero h1{margin:0;font-size:22px;}
-.hero p{font-size:14px;margin:10px 0;}
-.hero button{
-background:white;color:#1976d2;
-border:none;padding:10px 20px;
-border-radius:20px;font-weight:bold;
+/* SEARCH */
+.search-box{padding:10px;background:white;}
+.search-box input{
+width:100%;padding:12px;border-radius:12px;border:1px solid #ddd;
 }
 
-/* SECTION */
-.section{padding:20px;}
-.section h2{text-align:center;margin-bottom:15px;}
+/* SCROLL */
+.category-scroll,.brand{
+display:flex;gap:8px;padding:10px;background:white;
+overflow-x:auto;
+}
+button{
+border:none;padding:8px 14px;border-radius:20px;
+background:#e3f2fd;color:#1976d2;
+}
+.active{background:#1976d2;color:white;}
 
 /* GRID */
 .container{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
+display:grid;grid-template-columns:repeat(2,1fr);
+gap:12px;padding:10px;
+}
+@media(max-width:480px){
+.container{grid-template-columns:1fr;}
 }
 
 /* CARD */
 .card{
-background:white;
-border-radius:14px;
-padding:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
+background:white;border-radius:16px;padding:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
 }
 .card img{
 width:100%;
 aspect-ratio:1/1;
 object-fit:contain;
-border-radius:10px;
-background:white;
-padding:8px;
+padding:10px;
 }
 .price{color:#1976d2;font-weight:bold;}
+
+/* BUTTON */
 .btn{
-width:100%;
-padding:8px;
-border:none;
-border-radius:8px;
-margin-top:6px;
+width:100%;padding:10px;margin-top:6px;
+border:none;border-radius:8px;
 }
-.buy{background:#1976d2;color:white}
+.cart{background:#e3f2fd;color:#1976d2;}
+.buy{background:#1976d2;color:white;}
 
-/* ABOUT */
-.about{
-background:white;
-border-radius:12px;
-padding:15px;
-text-align:center;
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
+/* CART */
+#cartOverlay{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.4);display:none;
 }
-
-/* FOOTER */
-.footer{
-text-align:center;
-padding:15px;
-font-size:13px;
-color:#777;
+#cartModal{
+position:fixed;right:-100%;top:0;width:85%;height:100%;
+background:white;padding:15px;transition:0.3s;
+}
+.checkout-bar{
+position:fixed;bottom:0;width:100%;padding:10px;background:white;
+}
+.checkout-btn{
+width:100%;padding:12px;background:#1976d2;color:white;
+border:none;border-radius:10px;
 }
 
-/* MOBILE */
-@media(max-width:480px){
-.container{grid-template-columns:1fr;}
+/* TOAST */
+#toast{
+position:fixed;top:20px;left:50%;
+transform:translateX(-50%);
+background:#1976d2;color:white;
+padding:10px 20px;border-radius:8px;
+opacity:0;transition:0.3s;
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<div class="logo">ALTA.ID</div>
-<div class="menu">
-<a href="#produk">Produk</a>
-<a href="#tentang">Tentang</a>
-</div>
+<div class="header">Katalog Container Box</div>
+
+<div id="toast">Ditambahkan ke keranjang</div>
+
+<div class="search-box">
+<input type="text" id="search" placeholder="Cari produk..." onkeyup="update()">
 </div>
 
-<!-- HERO -->
-<div class="hero">
-<h1>Supplier Container Box Berkualitas</h1>
-<p>Katalog lengkap, langsung order via WhatsApp</p>
-<button onclick="scrollToProduk()">Lihat Produk</button>
+<div class="category-scroll">
+<button onclick="setCat('all',this)" class="active">Semua</button>
+<button onclick="setCat('Jolly Box',this)">Jolly Box</button>
 </div>
 
-<!-- PRODUK -->
-<div class="section" id="produk">
-<h2>Produk Kami</h2>
+<div class="brand">
+<button onclick="setBrand('all',this)" class="active">Semua Brand</button>
+<button onclick="setBrand('Hanata',this)">Hanata</button>
+</div>
 
 <div class="container">
 
-<div class="card">
+<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="Jolly Box Hanata 643">
 <img src="JBHNT643.png">
 <div>Jolly Box Hanata 643</div>
 <div class="price">Rp 50.000</div>
+<button class="btn cart" onclick="addCart('Jolly Box Hanata 643')">+ Keranjang</button>
 <button class="btn buy" onclick="order('Jolly Box Hanata 643')">Beli</button>
 </div>
 
-<div class="card">
+<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="Jolly Box Hanata 642">
 <img src="JBHNT642.png">
 <div>Jolly Box Hanata 642</div>
 <div class="price">Rp 41.000</div>
+<button class="btn cart" onclick="addCart('Jolly Box Hanata 642')">+ Keranjang</button>
 <button class="btn buy" onclick="order('Jolly Box Hanata 642')">Beli</button>
 </div>
 
-<div class="card">
-<img src="JBHNT641.png">
-<div>Jolly Box Hanata 641</div>
-<div class="price">Rp 41.000</div>
-<button class="btn buy" onclick="order('Jolly Box Hanata 641')">Beli</button>
 </div>
 
-</div>
+<!-- CART -->
+<div id="cartOverlay" onclick="toggleCart()"></div>
+
+<div id="cartModal">
+<h3>Keranjang</h3>
+<div id="cartItems"></div>
+<button onclick="checkout()" class="checkout-btn">Checkout</button>
 </div>
 
-<!-- ABOUT -->
-<div class="section" id="tentang">
-<h2>Tentang Kami</h2>
-<div class="about">
-Kami menyediakan berbagai container box, jolly box, dan kebutuhan penyimpanan dengan kualitas terbaik dan harga terjangkau.  
-Cocok untuk rumah tangga, toko, maupun bisnis.
-</div>
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-© 2026 ALTA.ID - All Rights Reserved
+<div class="checkout-bar">
+<button class="checkout-btn" onclick="toggleCart()">🛒 Lihat Keranjang</button>
 </div>
 
 <script>
-function order(product){
-window.open("https://wa.me/6285117385055?text="+encodeURIComponent("Halo, saya mau pesan "+product));
+let cat='all';
+let brand='all';
+let cart=[];
+
+function showToast(text){
+let t=document.getElementById("toast");
+t.innerText=text;t.style.opacity=1;
+setTimeout(()=>t.style.opacity=0,1500);
 }
 
-function scrollToProduk(){
-document.getElementById("produk").scrollIntoView({behavior:"smooth"});
+function setCat(c,btn){
+cat=c;brand='all';update();
+setActive(btn,'.category-scroll button');
 }
+
+function setBrand(b,btn){
+brand=b;update();
+setActive(btn,'.brand button');
+}
+
+function update(){
+let keyword=document.getElementById("search").value.toLowerCase();
+document.querySelectorAll('.product').forEach(p=>{
+let name=p.dataset.name.toLowerCase();
+let match=name.includes(keyword);
+let cMatch=(cat==='all'||p.dataset.cat===cat);
+let bMatch=(brand==='all'||p.dataset.brand===brand);
+p.style.display=(match&&cMatch&&bMatch)?'block':'none';
+});
+}
+
+function setActive(btn,selector){
+document.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+}
+
+function addCart(name){
+let item=cart.find(i=>i.name===name);
+if(item){item.qty++;}
+else{cart.push({name:name,qty:1});}
+renderCart();
+showToast("✔ Ditambahkan");
+}
+
+function renderCart(){
+let html="";
+cart.forEach((i,idx)=>{
+html+=`${i.name} x${i.qty}<br>`;
+});
+document.getElementById("cartItems").innerHTML=html;
+}
+
+function toggleCart(){
+let m=document.getElementById("cartModal");
+let o=document.getElementById("cartOverlay");
+if(m.style.right==="0px"){
+m.style.right="-100%";o.style.display="none";
+}else{
+m.style.right="0px";o.style.display="block";
+}
+}
+
+function checkout(){
+if(cart.length==0){showToast("Keranjang kosong");return;}
+let text="Pesanan:\n";
+cart.forEach(i=>text+=`- ${i.name} x${i.qty}\n`);
+window.open("https://wa.me/6285117385055?text="+encodeURIComponent(text));
+}
+
+function order(p){
+window.open("https://wa.me/6285117385055?text="+encodeURIComponent("Pesan "+p));
+}
+
+update();
 </script>
 
 </body>
