@@ -6,23 +6,19 @@
 
 <style>
 *{box-sizing:border-box;}
-body{margin:0;font-family:Segoe UI;background:#f5f7fa;color:#333}
+body{margin:0;font-family:Segoe UI;background:#f5f7fa}
 
 /* HEADER */
 .header{
 position:sticky;top:0;background:white;
-display:flex;justify-content:space-between;
-align-items:center;padding:12px 16px;
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
-z-index:10;
+padding:12px;text-align:center;
+font-weight:bold;box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
-.logo{font-weight:bold;}
-.menu a{margin-left:10px;text-decoration:none;color:#1976d2;}
 
 /* HERO */
 .hero{
 background:#1976d2;color:white;
-padding:40px 20px;text-align:center;
+padding:30px;text-align:center;
 }
 
 /* SEARCH */
@@ -31,11 +27,12 @@ padding:40px 20px;text-align:center;
 width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;
 }
 
-/* CATEGORY & BRAND */
+/* FILTER */
 .category,.brand{
-display:flex;gap:10px;overflow:auto;padding:10px;background:white;
+display:flex;gap:8px;padding:10px;background:white;
+overflow:auto;
 }
-.category button,.brand button{
+button.filter{
 border:none;padding:8px 12px;border-radius:20px;
 background:#e3f2fd;color:#1976d2;
 }
@@ -44,27 +41,24 @@ background:#e3f2fd;color:#1976d2;
 /* GRID */
 .container{
 display:grid;grid-template-columns:repeat(2,1fr);
-gap:12px;padding:10px;
+gap:10px;padding:10px;
 }
 @media(max-width:480px){.container{grid-template-columns:1fr;}}
 
 /* CARD */
 .card{
-background:white;border-radius:14px;padding:10px;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
+background:white;border-radius:12px;padding:10px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
 .card img{
-width:100%;aspect-ratio:1/1;
-object-fit:contain;padding:10px;
+width:100%;aspect-ratio:1/1;object-fit:contain;
 }
-
-/* PRICE */
-.price{color:#1976d2;font-weight:bold;}
+.price{color:#1976d2;font-weight:bold}
 
 /* BUTTON */
-.btn{width:100%;padding:8px;border:none;border-radius:8px;margin-top:6px;}
+.btn{width:100%;padding:8px;border:none;border-radius:8px;margin-top:5px;}
 .cart{background:#e3f2fd;color:#1976d2;}
-.buy{background:#1976d2;color:white;}
+.buy{background:#1976d2;color:white}
 
 /* CART */
 #cartOverlay{
@@ -73,21 +67,25 @@ background:rgba(0,0,0,0.4);display:none;
 }
 #cartModal{
 position:fixed;right:-100%;top:0;width:80%;height:100%;
-background:white;padding:15px;transition:0.3s;
+background:white;padding:15px;transition:0.3s;overflow:auto;
 }
+
+.qty-btn{
+padding:5px 10px;margin:0 5px;
+}
+
+/* CHECKOUT */
 .checkout-bar{
-position:fixed;bottom:0;width:100%;padding:10px;background:white;
+position:fixed;bottom:0;width:100%;background:white;padding:10px;
 }
 .checkout-btn{
-width:100%;padding:12px;background:#1976d2;color:white;border:none;border-radius:10px;
+width:100%;padding:10px;background:#1976d2;color:white;border:none;border-radius:8px;
 }
 
 /* TOAST */
 #toast{
-position:fixed;top:20px;left:50%;
-transform:translateX(-50%);
-background:#1976d2;color:white;
-padding:10px 20px;border-radius:8px;
+position:fixed;top:20px;left:50%;transform:translateX(-50%);
+background:#1976d2;color:white;padding:10px 20px;border-radius:8px;
 opacity:0;transition:0.3s;
 }
 </style>
@@ -95,35 +93,26 @@ opacity:0;transition:0.3s;
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-<div class="logo">ALTA.ID</div>
-<div class="menu">
-<a href="#produk">Produk</a>
-</div>
-</div>
+<div class="header">ALTA.ID</div>
 
-<!-- HERO -->
 <div class="hero">
-<h1>Supplier Container Box Berkualitas</h1>
-<p>Katalog lengkap, langsung order via WhatsApp</p>
+<h2>Supplier Container Box</h2>
 </div>
 
-<!-- SEARCH -->
 <div class="search-box">
-<input type="text" id="search" placeholder="Cari produk..." onkeyup="update()">
+<input type="text" id="search" placeholder="Cari..." onkeyup="update()">
 </div>
 
 <!-- CATEGORY -->
 <div class="category">
-<button onclick="setCat('all',this)" class="active">Semua</button>
-<button onclick="setCat('Jolly Box',this)">Jolly Box</button>
+<button class="filter active" onclick="setCat('all',this)">Semua</button>
+<button class="filter" onclick="setCat('Jolly Box',this)">Jolly Box</button>
 </div>
 
 <!-- BRAND -->
 <div class="brand">
-<button onclick="setBrand('all',this)" class="active">Semua Brand</button>
-<button onclick="setBrand('Hanata',this)">Hanata</button>
+<button class="filter active" onclick="setBrand('all',this)">Semua Brand</button>
+<button class="filter" onclick="setBrand('Hanata',this)">Hanata</button>
 </div>
 
 <!-- PRODUK -->
@@ -160,64 +149,116 @@ opacity:0;transition:0.3s;
 <button class="checkout-btn" onclick="toggleCart()">🛒 Lihat Keranjang</button>
 </div>
 
-<!-- NOTIF -->
 <div id="toast"></div>
 
 <script>
 let cat='all',brand='all',cart=[];
 
+/* FILTER */
+function setCat(c,btn){
+cat=c;
+update();
+setActive(btn,'.category .filter');
+}
+
+function setBrand(b,btn){
+brand=b;
+update();
+setActive(btn,'.brand .filter');
+}
+
 function update(){
 let keyword=document.getElementById("search").value.toLowerCase();
+
 document.querySelectorAll('.product').forEach(p=>{
-let name=p.dataset.name;
+let name=p.dataset.name.toLowerCase();
 let match=name.includes(keyword);
 let cMatch=(cat==='all'||p.dataset.cat===cat);
 let bMatch=(brand==='all'||p.dataset.brand===brand);
+
 p.style.display=(match&&cMatch&&bMatch)?'block':'none';
 });
 }
-
-function setCat(c,btn){cat=c;update();setActive(btn,'.category button');}
-function setBrand(b,btn){brand=b;update();setActive(btn,'.brand button');}
 
 function setActive(btn,selector){
 document.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
 btn.classList.add('active');
 }
 
+/* CART */
 function addCart(name){
 let item=cart.find(i=>i.name===name);
-if(item){item.qty++;}else{cart.push({name,qty:1});}
-renderCart();showToast("✔ Ditambahkan");
+if(item){item.qty++;}
+else{cart.push({name:name,qty:1});}
+renderCart();
+showToast("✔ Ditambahkan");
 }
 
 function renderCart(){
 let html="";
-cart.forEach(i=>html+=`${i.name} x${i.qty}<br>`);
+cart.forEach((item,i)=>{
+html+=`
+<div style="border-bottom:1px solid #ddd;padding:8px;">
+${item.name}<br>
+<button class="qty-btn" onclick="changeQty(${i},-1)">-</button>
+${item.qty}
+<button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+<button onclick="removeItem(${i})">❌</button>
+</div>`;
+});
 document.getElementById("cartItems").innerHTML=html;
 }
 
+function changeQty(i,val){
+cart[i].qty+=val;
+if(cart[i].qty<=0){cart.splice(i,1);}
+renderCart();
+}
+
+function removeItem(i){
+cart.splice(i,1);
+renderCart();
+}
+
+/* CART UI */
 function toggleCart(){
 let m=document.getElementById("cartModal");
 let o=document.getElementById("cartOverlay");
-if(m.style.right==="0px"){m.style.right="-100%";o.style.display="none";}
-else{m.style.right="0px";o.style.display="block";}
+
+if(m.style.right==="0px"){
+m.style.right="-100%";
+o.style.display="none";
+}else{
+m.style.right="0px";
+o.style.display="block";
+}
 }
 
+/* CHECKOUT */
 function checkout(){
-if(cart.length==0){showToast("Keranjang kosong");return;}
+if(cart.length==0){
+showToast("Keranjang kosong");
+return;
+}
+
 let text="Pesanan:\n";
-cart.forEach(i=>text+=`- ${i.name} x${i.qty}\n`);
+cart.forEach(i=>{
+text+=`- ${i.name} x${i.qty}\n`;
+});
+
 window.open("https://wa.me/6285117385055?text="+encodeURIComponent(text));
 }
 
+/* ORDER */
 function order(p){
 window.open("https://wa.me/6285117385055?text="+encodeURIComponent("Pesan "+p));
 }
 
+/* TOAST */
 function showToast(text){
 let t=document.getElementById("toast");
-t.innerText=text;t.style.opacity=1;
+t.innerText=text;
+t.style.opacity=1;
 setTimeout(()=>t.style.opacity=0,1500);
 }
 
