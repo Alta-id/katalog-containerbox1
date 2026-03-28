@@ -70,8 +70,17 @@ position:fixed;right:-100%;top:0;width:80%;height:100%;
 background:white;padding:15px;transition:0.3s;overflow:auto;
 }
 
-.qty-btn{
-padding:5px 10px;margin:0 5px;
+.qty-btn {
+padding:5px 10px;
+border:none;
+background:#e3f2fd;
+border-radius:5px;
+}
+
+.cart-item {
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 /* CHECKOUT */
@@ -132,6 +141,14 @@ opacity:0;transition:0.3s;
 <div class="price">Rp 41.000</div>
 <button class="btn cart" onclick="addCart('Jolly Box Hanata 642')">+ Keranjang</button>
 <button class="btn buy" onclick="order('Jolly Box Hanata 642')">Beli</button>
+</div>
+
+<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="jolly box hanata 641">
+<img src="JBHNT641.png">
+<div>Jolly Box Hanata 641</div>
+<div class="price">Rp 25.000</div>
+<button class="btn cart" onclick="addCart('Jolly Box Hanata 641')">+ Keranjang</button>
+<button class="btn buy" onclick="order('Jolly Box Hanata 641')">Beli</button>
 </div>
 
 </div>
@@ -198,12 +215,19 @@ function renderCart(){
 let html="";
 cart.forEach((item,i)=>{
 html+=`
-<div style="border-bottom:1px solid #ddd;padding:8px;">
+<div style="border-bottom:1px solid #ddd;padding:10px;display:flex;justify-content:space-between;align-items:center;">
+
+<div>
 ${item.name}<br>
 <button class="qty-btn" onclick="changeQty(${i},-1)">-</button>
 ${item.qty}
 <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-<button onclick="removeItem(${i})">❌</button>
+</div>
+
+<div style="cursor:pointer;font-size:18px;" onclick="removeItem(${i})">
+🗑️
+</div>
+
 </div>`;
 });
 document.getElementById("cartItems").innerHTML=html;
