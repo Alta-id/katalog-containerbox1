@@ -74,6 +74,16 @@ background:white;padding:15px;transition:0.3s;overflow:auto;
 padding:5px 10px;border:none;background:#e3f2fd;border-radius:5px;
 }
 
+/* NOTE */
+.note-input{
+width:100%;
+margin-top:5px;
+padding:6px;
+border-radius:6px;
+border:1px solid #ddd;
+font-size:12px;
+}
+
 /* CHECKOUT */
 .checkout-bar{
 position:fixed;bottom:0;width:100%;background:white;padding:10px;
@@ -131,14 +141,6 @@ opacity:0;transition:0.3s;
 <button class="btn buy" onclick="order('Jolly Box Hanata 642')">Beli</button>
 </div>
 
-<div class="card product" data-cat="Jolly Box" data-brand="Hanata" data-name="jolly box hanata 641">
-<img src="JBHNT641.png">
-<div>Jolly Box Hanata 641</div>
-<div class="price">Rp 25.000</div>
-<button class="btn cart" onclick="addCart('Jolly Box Hanata 641',25000)">+ Keranjang</button>
-<button class="btn buy" onclick="order('Jolly Box Hanata 641')">Beli</button>
-</div>
-
 </div>
 
 <!-- CART -->
@@ -147,10 +149,6 @@ opacity:0;transition:0.3s;
 <div id="cartModal">
 <h3>Keranjang</h3>
 <div id="cartItems"></div>
-
-<textarea id="note" placeholder="Catatan (opsional)..."
-style="width:100%;margin-top:10px;padding:10px;border-radius:10px;border:1px solid #ddd;"></textarea>
-
 <button onclick="checkout()" class="checkout-btn">Checkout</button>
 </div>
 
@@ -187,7 +185,7 @@ btn.classList.add('active');
 function addCart(name,price){
 let item=cart.find(i=>i.name===name);
 if(item){item.qty++;}
-else{cart.push({name,price,qty:1});}
+else{cart.push({name,price,qty:1,note:""});}
 renderCart();
 showToast("✔ Ditambahkan");
 }
@@ -201,8 +199,8 @@ let sub=item.price*item.qty;
 total+=sub;
 
 html+=`
-<div style="border-bottom:1px solid #ddd;padding:10px;display:flex;justify-content:space-between;">
-<div>
+<div style="border-bottom:1px solid #ddd;padding:10px;">
+
 ${item.name}<br>
 Rp ${item.price.toLocaleString()} x ${item.qty}<br>
 <b>Rp ${sub.toLocaleString()}</b><br>
@@ -210,15 +208,23 @@ Rp ${item.price.toLocaleString()} x ${item.qty}<br>
 <button class="qty-btn" onclick="changeQty(${i},-1)">-</button>
 ${item.qty}
 <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-</div>
 
-<div onclick="removeItem(${i})" style="cursor:pointer;font-size:18px;">🗑️</div>
+<input class="note-input" placeholder="Catatan produk..." 
+value="${item.note}" 
+oninput="updateNote(${i},this.value)">
+
+<div onclick="removeItem(${i})" style="text-align:right;cursor:pointer;">🗑️</div>
+
 </div>`;
 });
 
 html+=`<div style="padding:10px;font-weight:bold;">Total: Rp ${total.toLocaleString()}</div>`;
 
 document.getElementById("cartItems").innerHTML=html;
+}
+
+function updateNote(i,val){
+cart[i].note=val;
 }
 
 function changeQty(i,val){
@@ -232,7 +238,6 @@ cart.splice(i,1);
 renderCart();
 }
 
-/* UI */
 function toggleCart(){
 let m=document.getElementById("cartModal");
 let o=document.getElementById("cartOverlay");
@@ -256,25 +261,25 @@ let total=0;
 cart.forEach(i=>{
 let sub=i.price*i.qty;
 total+=sub;
-text+=`- ${i.name} x${i.qty} = Rp ${sub.toLocaleString()}\n`;
+
+text+=`- ${i.name} x${i.qty} = Rp ${sub.toLocaleString()}`;
+
+if(i.note){
+text+=` (Catatan: ${i.note})`;
+}
+
+text+=`\n`;
 });
 
 text+=`\nTotal: Rp ${total.toLocaleString()}`;
 
-let note=document.getElementById("note").value;
-if(note){
-text+=`\n\nCatatan: ${note}`;
-}
-
 window.open("https://wa.me/6285117385055?text="+encodeURIComponent(text));
 }
 
-/* ORDER */
 function order(p){
 window.open("https://wa.me/6285117385055?text="+encodeURIComponent("Pesan "+p));
 }
 
-/* TOAST */
 function showToast(text){
 let t=document.getElementById("toast");
 t.innerText=text;
